@@ -6,6 +6,8 @@ Handles the requesting of the 2fa password
 
 ## Implementation
 
+pip install onetimepass
+
 Grab the Raw python_2fa.py and place in your include/class directory
 
 ### Example
