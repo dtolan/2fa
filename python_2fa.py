@@ -12,7 +12,11 @@ import base64
 from os import path
 
 
-class python_2fa:
+class Python2FA:
+    """
+    A simple implementation of the ontimepass python module (pip install onetimepass)
+    Allows for the passing of either a secret or filename containing the secret in the 
+    """
     secret = None
 
     def __init__(self, secret=None, filename=None):
@@ -58,5 +62,5 @@ class python_2fa:
 
 
 if __name__ == "__main__":
-    authenticator = python_2fa(filename='example/secret')  # secret=secret)
+    authenticator = Python2FA(filename='example/secret')  # secret=secret)
     authenticator.response()
