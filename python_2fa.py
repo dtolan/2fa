@@ -7,9 +7,10 @@ my_token = 123456 # should be probably from some user's input
 isValid = otp.valid_totp(token=my_token, secret=my_secret)
 """
 from getpass import getpass
-import onetimepass as otp
-import base64
 from os import path
+
+import base64
+import onetimepass as otp
 
 
 class Python2FA:
@@ -17,7 +18,6 @@ class Python2FA:
     A simple implementation of the ontimepass python module (pip install onetimepass)
     Allows for the passing of either a secret or filename containing the secret in the 
     """
-    secret = None
 
     def __init__(self, secret=None, filename=None):
 
@@ -29,36 +29,38 @@ class Python2FA:
             self.secret = self.__padding__(self.secret)
             self.secret = base64.b32encode(base64.b32decode(self.secret))
 
-    def __padding__(self, data):
+    @staticmethod
+    def __padding__(data):
         missing_padding = len(data) % 8
         if missing_padding:
             data += b'=' * (8 - missing_padding)
         return data
 
-    def __get_secret__(self, filename):
+    @staticmethod
+    def __get_secret__(filename):
         if not path.exists(filename):
             print("did not find file")
             return None
 
         try:
-            with open(filename, "r") as file:
+            with open(filename, "r", encoding="utf8") as file:
                 line = file.readline()
                 return line.encode('utf-8')
 
-        except:
+        except IOError:
             print("Failed to Open file")
             return None
 
     def response(self, tries=3):
+        """ Need Documentation Here """
         count = 0
-        isValid = False
-        while count < tries and isValid is False:
+        is_valid = False
+        while count < tries and is_valid is False:
             count = count + 1
             token = getpass("2FA Authentication: ")
             if len(token) > 1:
-                isValid = otp.valid_totp(token=token, secret=self.secret)
-                print(isValid)
-        return isValid
+                is_valid = otp.valid_totp(token=token, secret=self.secret)
+        return is_valid
 
 
 if __name__ == "__main__":
